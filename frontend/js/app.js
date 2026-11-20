@@ -21,8 +21,20 @@ async function loadkategori_alat() {
 loadkategori_alat();
 
 function renderkategori_alat(kategori_alatData) {
+
     const container = document.getElementById("kategori_alat-container");
     container.innerHTML = "";
+
+    const selectKategori = document.getElementById("id_kategori");
+    selectKategori.innerHTML = '<option value="">Pilih kategori</option>';
+
+    kategori_alatData.forEach((kategori) => {
+        const option = document.createElement("option");
+        option.value = kategori.id_kategori;
+        option.textContent = kategori.nama_kategori;
+        selectKategori.appendChild(option);
+    });
+
     // 1. Buat tombol khusus untuk "Semua Produk"
     const btnAll = document.createElement("button");
     btnAll.className = "px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-100";
@@ -110,8 +122,16 @@ function renderalat(alatData) {
                     Kondisi: ${alat.kondisi}
                 </p>
 
-                <button class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
-                    Pinjam
+                <p class="text-gray-600 mb-4">
+                Lokasi: ${alat.lokasi}
+                </p>
+                <button
+                onclick="hapusAlat(${alat.id_alat})"
+                style="background-color:red;
+                color:white;
+                padding:10px;
+                margin-top:10px;">
+                Hapus
                 </button>
             </div>
         `;
@@ -122,11 +142,11 @@ async function loadPeminjaman() {
     try {
         const response = await fetch("http://localhost:5000/api/peminjaman");
         const data = await response.json();
-        console.log("data peminjaman:",data)
-        
-            const container = document.getElementById("peminjaman-container");
-            container.innerHTML="";
-            data.forEach((peminjaman) => {
+        console.log("data peminjaman:", data)
+
+        const container = document.getElementById("peminjaman-container");
+        container.innerHTML = "";
+        data.forEach((peminjaman) => {
             container.innerHTML += ` 
 
                 <div class="border border-gray-300 rounded-xl bg-white p-5 shadow-sm hover:shadow-md mb-4">
@@ -148,6 +168,9 @@ async function loadPeminjaman() {
                     <p class="text-gray-600 mb-1">
                         Jumlah: ${peminjaman.jumlah}
                   </p>
+                  <p class="text-gray-600 mb-1">
+                        Status: ${peminjaman.status}
+                  </p>
                     <button  onclick="kembalikanalat(${peminjaman.id_peminjaman})"
                     style="display:block;
                     background-color:green;
@@ -157,7 +180,7 @@ async function loadPeminjaman() {
                     Kembalikan
                     </button>
 
-                <button onclick=hapusPeminjaman(${peminjaman.id_id_peminjaman})"
+                <button onclick="hapuspeminjaman(${peminjaman.id_peminjaman})"
                 style="display:block;
                 background-color:red;
                 color:white;
@@ -174,30 +197,41 @@ async function loadPeminjaman() {
 }
 loadPeminjaman();
 
-async function kembalikanalat(id){
-    try{
+async function kembalikanalat(id) {
+    try {
         const response = await fetch(
             `http://localhost:5000/api/peminjaman/${id}/kembalikan`,
-            {method:"PUT"}
+            { method: "PUT" }
         );
-        const data =await response.json();
-        if(!response.ok){
+        const data = await response.json();
+        if (!response.ok) {
             alert(data.error);
             return
         }
         alert("Alat berhasil dikembalikan");
         loadPeminjaman();
         loadalat();
-    }catch (error){
-        console.error("gagal mengembalikan alat",error);
+    } catch (error) {
+        console.error("gagal mengembalikan alat", error);
     }
 }
 
-async function hapuspeminjaman(id){
-    try{
+async function hapuspeminjaman(id) {
+    try {
         const response = await fetch(
-            `http://`
-        )
+            `http://localhost:5000/api/peminjaman/${id}`, {
+            method: "DELETE"
+        }
+        );
+        const data = await response.json();
+        if (!response.ok) {
+            alert(data.error);
+            return;
+        }
+        alert("Riwayat berhasil dihapus");
+        loadPeminjaman();
+    } catch (error) {
+        console.error("Gagal menghapus riwayat:", error);
     }
 }
 
@@ -208,6 +242,7 @@ form.addEventListener("submit", async (event) => {
 
     const id_alat = document.getElementById("alat").value;
     const nama_peminjam = document.getElementById("nama_peminjam").value;
+    const kelas = document.getElementById("kelas").value;
     const tanggal_pinjam = document.getElementById("tanggal_pinjam").value;
     const tanggal_kembali = document.getElementById("tanggal_kembali").value;
     const jumlah = document.getElementById("jumlah").value;
@@ -221,7 +256,7 @@ form.addEventListener("submit", async (event) => {
             body: JSON.stringify({
                 id_alat: id_alat,
                 nama_peminjam: nama_peminjam,
-                kelas: "XI RPL A",
+                kelas: kelas,
                 tanggal_pinjam: tanggal_pinjam,
                 tanggal_kembali: tanggal_kembali,
                 jumlah: jumlah
@@ -242,3 +277,74 @@ form.addEventListener("submit", async (event) => {
         console.error("gagal melakukan peminjaman:", error);
     }
 });
+
+// fungsi tambah alat
+const formAlat = document.getElementById("form-alat");
+
+formAlat.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const id_kategori = document.getElementById("id_kategori").value;
+    const nama_alat = document.getElementById("nama_alat").value;
+    const kondisi = document.getElementById("kondisi").value;
+    const stok = document.getElementById("stok").value;
+    const lokasi = document.getElementById("lokasi").value;
+
+    try {
+        const response = await fetch("http://localhost:5000/api/alat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id_kategori: id_kategori,
+                nama_alat: nama_alat,
+                kondisi: kondisi,
+                stok: stok,
+                lokasi: lokasi
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error(data);
+            alert("Gagal menambahkan alat");
+            return;
+        }
+
+        alert("Alat berhasil ditambahkan");
+
+        formAlat.reset();
+
+        loadalat();
+
+    } catch (error) {
+        console.error("Gagal menambahkan alat:", error);
+    }
+});
+
+async function hapusAlat(id) {
+    try {
+        const response = await fetch(
+            `http://localhost:5000/api/alat/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.error);
+            return;
+        }
+
+        alert("Alat berhasil dihapus");
+
+        loadalat();
+
+    } catch (error) {
+        console.error("Gagal menghapus alat:", error);
+    }
+}

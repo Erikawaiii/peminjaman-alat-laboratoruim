@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,10 +20,13 @@
                 <a href="#" class="text-white hover:text-gray-300">
                     Beranda
                 </a>
+                <a href="#kelola-alat" class="text-white hover:text-gray-300">
+                    Kelola Alat
+                </a>
                 <a href="#peminjaman" class="text-white hover:text-gray-300">
                     Peminjaman
                 </a>
-                <a href="#riwayat peminjaman" class="text-white hover:text-gray-300">
+                <a href="#riwayat-peminjaman" class="text-white hover:text-gray-300">
                     Riwayat peminjaman
                 </a>
             </div>
@@ -36,15 +39,67 @@
             Kategori Alat
         </h1>
 
-        <div id="kategori_alat-container" class="flex flex-wrap gap-3 p-4 border-gray-300 rounded-xl bg-white shadow-sm"></div>
+        <div id="kategori_alat-container"
+            class="flex flex-wrap gap-3 p-4 border-gray-300 rounded-xl bg-white shadow-sm"></div>
 
         <h5 class="text-xl font-semibold mb-4">
             Daftar Alat
         </h5>
         <div id="alat-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
 
-        
+        <section class="max-w-6xl mx-auto px-4 py-8" id="kelola-alat">
+            <h2 class="text-2xl font-bold mb-4">
+                Kelola Alat
+            </h2>
 
+            <form id="form-alat" class="bg-white p-6 rounded-lg shadow mt-4">
+
+                <div class="mb-4">
+                    <label for="nama_alat" class="block font-medium mb-2">
+                        Nama Alat
+                    </label>
+                    <input type="text" id="nama_alat" class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                        required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="id_kategori" class="block font-medium mb-2">
+                        Kategori
+                    </label>
+
+                    <select id="id_kategori" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                        <option value="">Pilih kategori</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="kondisi" class="block font-medium mb-2">
+                        Kondisi
+                    </label>
+                    <input type="text" id="kondisi" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="stok" class="block font-medium mb-2">
+                        Stok
+                    </label>
+                    <input type="number" id="stok" min="1" class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                        required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="lokasi" class="block font-medium mb-2">
+                        Lokasi
+                    </label>
+                    <input type="text" id="lokasi" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                </div>
+
+                <button type="submit" class="bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-700">
+                    Simpan Alat
+                </button>
+
+            </form>
+        </section>
     </div>
 
     <div class="max-w-3xl mx-auto px-4 py-8" id="peminjaman">
@@ -60,12 +115,16 @@
                     Nama Peminjam
                 </label>
 
-                <input
-                    type="text"
-                    id="nama_peminjam"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2"
-                    required
-                >
+                <input type="text" id="nama_peminjam" class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label for="kelas" class="block font-medium mb-2">
+                    Kelas
+                </label>
+
+                <input type="text" id="kelas" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
             </div>
 
             <div class="mb-4">
@@ -73,11 +132,7 @@
                     Alat
                 </label>
 
-                <select
-                    id="alat"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2"
-                    required
-                >
+                <select id="alat" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
                     <option value="">Pilih alat</option>
                 </select>
             </div>
@@ -87,13 +142,8 @@
                     Jumlah
                 </label>
 
-                <input
-                    type="number"
-                    id="jumlah"
-                    min="1"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2"
-                    required
-                >
+                <input type="number" id="jumlah" min="1" class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    required>
             </div>
 
             <div class="mb-4">
@@ -101,12 +151,8 @@
                     Tanggal Pinjam
                 </label>
 
-                <input
-                    type="date"
-                    id="tanggal_pinjam"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2"
-                    required
-                >
+                <input type="date" id="tanggal_pinjam" class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    required>
             </div>
 
             <div class="mb-4">
@@ -114,24 +160,17 @@
                     Tanggal Kembali
                 </label>
 
-                <input
-                    type="date"
-                    id="tanggal_kembali"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2"
-                    required
-                >
+                <input type="date" id="tanggal_kembali" class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    required>
             </div>
 
-            <button
-                type="submit"
-                class="bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-700"
-            >
+            <button type="submit" class="bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-700">
                 Pinjam
             </button>
 
         </form>
 
-        <section class="mt-10" id="riwayat peminjaman">
+        <section class="mt-10" id="riwayat-peminjaman">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">
                 Riwayat Peminjaman
             </h2>
@@ -143,4 +182,5 @@
 
     <script src="js/app.js"></script>
 </body>
+
 </html>

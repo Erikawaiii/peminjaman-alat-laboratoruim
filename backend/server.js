@@ -151,7 +151,8 @@ app.get("/api/peminjaman", async (req, res) => {
                 p.kelas,
                 p.tanggal_pinjam,
                 p.tanggal_kembali,
-                p.jumlah
+                p.jumlah,
+                p.status
             FROM peminjaman p
             LEFT JOIN alat a ON p.id_alat = a.id_alat
             LEFT JOIN kategori_alat c ON a.id_kategori = c.id_kategori
@@ -216,7 +217,7 @@ app.put("/api/peminjaman/:id/kembalikan",async (req,res) => {
         "DELETE FROM peminjaman WHERE id_peminjaman =$1 RETURNING *",
         [id]
       );
-      if(result.rows.lenght === 0){
+      if(result.rows.length=== 0){
         return res.status(404).json({
           error:"Data peminjaman tidak ditemukan"
         });
