@@ -1,56 +1,146 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peminjaman Alat Lab</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/output.css">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Peminjaman Alat Lab</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link active" href="#">Beranda</a>
-                <a class="nav-link" href="#">Peminjaman</a>
+
+<body class="bg-gray-100">
+
+    <nav class="bg-gray-900 text-white">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold">
+                Peminjaman Alat Lab
+            </a>
+
+            <div class="flex gap-6">
+                <a href="#" class="text-white hover:text-gray-300">
+                    Beranda
+                </a>
+                <a href="#peminjaman" class="text-white hover:text-gray-300">
+                    Peminjaman
+                </a>
+                <a href="#riwayat peminjaman" class="text-white hover:text-gray-300">
+                    Riwayat peminjaman
+                </a>
             </div>
         </div>
     </nav>
-    <div class="container mt-4">
-        <h1 class="mb-4">Kategori Alat</h1>
-        <div id="kategori_alat-container" class="row"></div>
 
-        <h5>Daftar Alat</h5>
-        <div id="alat-container" class="row"></div>
+    <div class="max-w-6xl mx-auto px-4 py-8">
+
+        <h1 class="text-2xl font-bold mb-4">
+            Kategori Alat
+        </h1>
+
+        <div id="kategori_alat-container" class="flex flex-wrap gap-3 p-4 border-gray-300 rounded-xl bg-white shadow-sm"></div>
+
+        <h5 class="text-xl font-semibold mb-4">
+            Daftar Alat
+        </h5>
+        <div id="alat-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+        
+
     </div>
-    <div class="mt-5" id="peminjaman">
-        <h2>Form Peminjaman</h2>
-        <form id="peminjaman-form">
-            <div class="mb-3">
-                <label for="nama_peminjam" class="form-label">Nama peminjam</label>
-                <input type="text" class="form-control" id="nama_peminjam" required>
+
+    <div class="max-w-3xl mx-auto px-4 py-8" id="peminjaman">
+
+        <h2 class="text-2xl font-bold mb-6">
+            Form Peminjaman
+        </h2>
+
+        <form id="peminjaman-form" class="bg-white p-6 rounded-lg shadow">
+
+            <div class="mb-4">
+                <label for="nama_peminjam" class="block font-medium mb-2">
+                    Nama Peminjam
+                </label>
+
+                <input
+                    type="text"
+                    id="nama_peminjam"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    required
+                >
             </div>
-            <div class="mb-3">
-                <label for="alat" class="form-label">Alat</label>
-                <select class="form-select" id="alat" required>
+
+            <div class="mb-4">
+                <label for="alat" class="block font-medium mb-2">
+                    Alat
+                </label>
+
+                <select
+                    id="alat"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    required
+                >
                     <option value="">Pilih alat</option>
                 </select>
             </div>
-           <div class="mb-3">
-            <label class="form-label">Jumlah</label>
-            <input type="number" class="form-control" id="jumlah" required>
-           </div>
-           <div class="mb-3">
-            <label for="tanggal_pinjam" class="form-label">Tanggal Pinjam</label>
-            <input type="date" class="form-control" id="tanggal_pinjam" required>
-    </div>
-    <div class="mb-3">
-        <label for="tanggal_kembali" class="form-label">Tanggal Kembali</label>
-        <input type="date" class="form-control" id="tanggal_kembali" required>
-    </div>
-    <button type="submit" class="btn btn-primary bg-dark">Pinjam</button
 
+            <div class="mb-4">
+                <label for="jumlah" class="block font-medium mb-2">
+                    Jumlah
+                </label>
 
-    <script src="app.js"></script>
+                <input
+                    type="number"
+                    id="jumlah"
+                    min="1"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    required
+                >
+            </div>
+
+            <div class="mb-4">
+                <label for="tanggal_pinjam" class="block font-medium mb-2">
+                    Tanggal Pinjam
+                </label>
+
+                <input
+                    type="date"
+                    id="tanggal_pinjam"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    required
+                >
+            </div>
+
+            <div class="mb-4">
+                <label for="tanggal_kembali" class="block font-medium mb-2">
+                    Tanggal Kembali
+                </label>
+
+                <input
+                    type="date"
+                    id="tanggal_kembali"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-700"
+            >
+                Pinjam
+            </button>
+
+        </form>
+
+        <section class="mt-10" id="riwayat peminjaman">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                Riwayat Peminjaman
+            </h2>
+
+            <div id="peminjaman-container" class="overflow-x-auto"></div>
+        </section>
+
+    </div>
+
+    <script src="js/app.js"></script>
 </body>
 </html>

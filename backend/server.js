@@ -110,12 +110,29 @@ app.post('/api/peminjaman', async (req, res) => {
       tanggal_kembali,
       jumlah
     } = req.body;
+    //cek stok alat
+    const cekstok = await pool.query(
+      "SELECT stok FROM alat WHERE id_alat =$1",
+      [id_alat]
+    );
+    if(cekstok.rows.length === 0){
+      return res.status(404).json({
+        error:"alat tidak ditemukan"
+      });
+    }
+    //cek stok sekarang
+    const stoksekarang=cekstok.rows[0].stok;
+
+    if(stoksekarang <jumlah){
+      return res.status(404).json({
+        error:"stok alat tidak cukup"
+    });
+  }
 
     const result = await pool.query(
       "INSERT INTO peminjaman (id_alat, nama_peminjam, kelas, tanggal_pinjam, tanggal_kembali,jumlah) VALUES ($1, $2, $3, $4, $5,$6) RETURNING *",
       [id_alat, nama_peminjam, kelas, tanggal_pinjam, tanggal_kembali,jumlah]
     );
-
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error(err.message);
@@ -129,6 +146,7 @@ app.get("/api/peminjaman", async (req, res) => {
             SELECT
                 p.id_peminjaman,  
                 p.id_alat,
+                a.nama_alat,
                 p.nama_peminjam,
                 p.kelas,
                 p.tanggal_pinjam,
@@ -152,6 +170,67 @@ app.get("/api/peminjaman", async (req, res) => {
     });
   }
 });
+
+app.put("/api/peminjaman/:id/kembalikan",async (req,res) => {
+  try{ 
+    const{ id }=req.params;
+
+    //cari data peminjaman
+    const peminjaman= await pool.query(
+      "SELECT id_alat,jumlah,status FROM peminjaman WHERE id_peminjaman =$1",
+      [id]
+    );
+
+    if(peminjaman.rows.length === 0){
+      return res.status(404).json({
+        error:"data peminjaman tidak ditemukan"
+      });
+  }
+  const data =peminjaman.rows[0];
+  //mencegah pengembalian dua kali
+  if(data.status === "Dikembalikan"){
+    return res.status(400).json({
+      error:"alat sudah dikembalikan"
+    });
+  }
+
+  //ubah status peminjaman
+  const result = await pool.query(
+    "UPDATE peminjaman SET status ='Dikembalikan' Where id_peminjaman =$1 RETURNING *",
+    [id]
+  );
+  res.json(result.rows[0]);
+  }catch(err){
+    console.error(err.message);
+    res.status(500).json({
+      error:"Gagal mengembalikan alat"
+    });
+  }
+  });
+
+  app.delete("/api/peminjaman/:id",async(req,res)=>{
+    try{
+      const{id} =req.params;
+
+      const result = await pool.query(
+        "DELETE FROM peminjaman WHERE id_peminjaman =$1 RETURNING *",
+        [id]
+      );
+      if(result.rows.lenght === 0){
+        return res.status(404).json({
+          error:"Data peminjaman tidak ditemukan"
+        });
+      }
+      res.json({
+        message:"riwayat peminjaman berhasil dihapus"
+      });
+    }catch (err){
+      console.error(err.message);
+      res.status(500).json({
+        error:"Gagal menghapus riwayat peminjaman"
+      });
+    }
+  });
 
 const PORT = 5000;
 app.listen(PORT, () => {
